@@ -1,431 +1,219 @@
-# Tiny Decision
+# ⚡ Tiny Decision
 
-> **Make fast, calibrated, explainable yes/no decisions with System One AI models — locally, privately, and blazingly quickly.**
+<p align="center">
+  <img src="assets/logo.jpg" alt="Tiny Decision Logo" width="140" style="border-radius: 24px; box-shadow: 0 0 35px rgba(0, 255, 136, 0.4);" />
+</p>
 
-[![Build](https://github.com/tinydecision/tiny-decision/actions/workflows/build.yml/badge.svg)](https://github.com/tinydecision/tiny-decision/actions/workflows/build.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Rust](https://img.shields.io/badge/rust-1.77%2B-orange.svg)](https://www.rust-lang.org/)
+<p align="center">
+  <strong>A Local Harness & Deployment Platform for System One AI Models on Windows</strong><br>
+  <em>Sub-50ms in-process decisions, empirical calibration trust, visual DAG pipelines, and one-click MCP agent tool export.</em>
+</p>
 
----
-
-## Table of Contents
-
-1. [What is Tiny Decision?](#what-is-tiny-decision)
-2. [Architecture](#architecture)
-3. [Quick Start](#quick-start)
-4. [Build Steps](#build-steps)
-5. [SOMI Specification](#somi-specification)
-6. [Plugin Authoring Guide](#plugin-authoring-guide)
-7. [CLI Usage](#cli-usage)
-8. [MCP Integration](#mcp-integration)
-9. [License](#license)
+<p align="center">
+  <a href="https://github.com/aryanthegamedev3465-collab/tiny-decision/releases"><img src="https://img.shields.io/github/v/release/aryanthegamedev3465-collab/tiny-decision?color=%2300ff88&label=release" alt="Release" /></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/platform-Windows%2010%20%2F%2011-00f0ff.svg" alt="Platform: Windows" /></a>
+  <a href="./docs/SOMI_SPEC.md"><img src="https://img.shields.io/badge/SOMI%20Spec-v1.0-9d4edd.svg" alt="SOMI Spec v1.0" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/latency-%3C%2050ms-ffb703.svg" alt="Latency < 50ms" /></a>
+</p>
 
 ---
 
-## What is Tiny Decision?
+## 🌟 Why Tiny Decision?
 
-**Tiny Decision** is a desktop-first, privacy-preserving AI decision engine. It runs small, fast **System One** (Jev-class) models locally to answer structured classification questions — and gives you calibrated confidence scores, cost-optimal thresholds, and full audit logs.
+LM Studio became the trusted, polished local home for prose-generation models (Llama, Mistral). But **System One models** (Jev-class, typed classification & regression heads) are a fundamentally distinct category: **they don't generate freeform text — they make instant, structured decisions.**
 
-### Use Cases
+Tiny Decision owns the three pillars needed for this category:
 
-| Domain | Example Question |
-|---|---|
-| Customer Support | Should this ticket be escalated to a human? |
-| E-commerce | Is this return request eligible for an automatic refund? |
-| Content Moderation | Is this email spam / phishing? |
-| HR / Ops | Does this applicant meet minimum screening criteria? |
-| Finance | Does this transaction look anomalous? |
-
-### Why "System One"?
-
-System One thinking is fast, pattern-based, and low-cost. LLMs sized 1B–7B parameters (Phi-2, Gemma-2-2B, Qwen-1.5-1.8B, etc.) make excellent System One classifiers when prompted correctly. Tiny Decision wraps these models behind the **SOMI** (System One Model Interface) HTTP contract so every model looks identical to your application.
-
-### Key Features
-
-- 🏠 **Fully local** — no data leaves your machine (unless you choose OpenRouter adapter)
-- ⚡ **Sub-100 ms decisions** on Apple Silicon / modern CPUs via llama.cpp GGUF
-- 📊 **Calibration** — Platt scaling, isotonic regression, temperature scaling
-- 🔀 **Auto-Router** — automatically selects the smallest model that meets your accuracy + latency SLA
-- 🧩 **Plugin system** — WASM-sandboxed plugins for adapters, alerting, ETL nodes
-- 🔌 **MCP compatible** — expose any Decision Template as an MCP tool
-- 🖥️ **Native desktop UI** — built with Tauri 2 + React (TypeScript)
-- 📟 **CLI** — `td eval`, `td run`, `td models` — CI/CD friendly
+1. **The Calibration Trust Moat:** The fatal flaw of small decision models is that *"confident ≠ correct"*. Tiny Decision makes calibration measurable and actionable: Expected Calibration Error (ECE) tracking, visual Reliability Diagrams, and **post-hoc recalibration** (Temperature & Platt scaling) that fixes confidence **with zero model retraining**.
+2. **Prototype to Production:** Test a decision in the visual workbench $\rightarrow$ evaluate 10,000 rows in the batch runner $\rightarrow$ **ship as an MCP tool** or local REST API (`127.0.0.1:11535`) in one click.
+3. **Vendor Neutrality (SOMI):** Tiny Decision defines the open **System One Model Interface (SOMI)**. Any current or future model vendor (local GGUF, local ONNX, Jev hosted API, OpenRouter) plugs in through the identical contract.
 
 ---
 
-## Architecture
+## 🎨 Grok-Inspired Visual Experience
+
+The application is styled with a high-tech **Grok aesthetic** — colourful, vibrant, yet intensely professional:
+
+- 🌌 **Cosmic Obsidian Canvas:** `#060709` deep-space background layered with atmospheric radial glows in cyan, neon emerald, and violet.
+- ⚡ **Neon System One Color System:**
+  - **Electric Cyan (`#00f0ff`):** Auto-router, active inputs, and system telemetry.
+  - **Hyper Emerald (`#00ff88`):** High-confidence decisions ($\ge 0.80$) and verified badges.
+  - **Cyber Amber (`#ffb703`):** Mid-confidence decisions ($0.50 - 0.79$) and human-review escalation indicators.
+  - **Neon Crimson (`#ff0055`):** Low-confidence / rejection flags ($< 0.50$).
+  - **Quantum Violet (`#9d4edd`):** DAG control flow and pipeline nodes.
+- 🧊 **Glassmorphic Decision Cards:** Frosted translucent panels (`.glass-card`), glowing dual-gradient probability meters, and animated latency counters.
+- 🚀 **1-Click Presets:** Instant decision presets in the playground for **Refund Validation**, **Spam Detection**, **Credit Risk**, and **Sentiment Analysis**.
+
+---
+
+## 🏗️ Architecture
+
+Tiny Decision embeds inference runtimes **in-process** in Rust (Tauri 2.x backend) to eliminate the 20–50ms process-boundary IPC hop common in Python sidecars.
 
 ```mermaid
 flowchart TD
-    subgraph Desktop["Desktop App (Tauri 2 / React)"]
-        UI["React UI\n(Model Browser, Template Editor,\nRun History, Calibration Dashboard)"]
-        TC["Tauri Commands\n(commands.rs)"]
+    subgraph Desktop["Windows Desktop (Tauri 2.x + React 18 + Zustand)"]
+        UI["Grok-Styled React UI\n(Playground, Visual DAG Canvas, Reliability Diagrams)"]
+        TC["Tauri IPC Bridge\n(commands.rs)"]
     end
 
-    subgraph Core["Core Engine (Rust)"]
-        AX["Axum HTTP Server\n:11535"]
-        DB["SQLite\n(decisions, runs, calibration)"]
-        INF["Inference Engine\n(llama.cpp via llama-rs)"]
-        CAL["Calibration Pipeline\n(Platt / Isotonic / Temp)"]
-        RT["Auto-Router"]
-        PL["Pipeline Runtime"]
-        PLG["Plugin Host\n(WASM via wasmtime)"]
+    subgraph Core["Rust Core Engine (In-Process Runtime)"]
+        HMR["Hot Model Registry\n(Concurrent in-memory slots)"]
+        GGUF["llama-cpp-2 (GGUF)\nDXGI VRAM Auto-GPU"]
+        ONNX["ort (ONNX Runtime)\nDirectML acceleration"]
+        SOMI["SOMI Abstraction Layer\n(GGUF, ONNX, Jev, Adapted LLM, Auto-Router)"]
+        CALIB["Calibration Engine\n(ECE, Platt, Temperature, Isotonic, Adversarial Probes)"]
+        DAG["11-Node Pipeline Engine\n(Decision, Branch, Fanout, Loop, Ensemble, Shadow)"]
+        AXUM["Axum REST Server\n(127.0.0.1:11535)"]
+        DB["SQLite Storage\n(rusqlite with WAL mode & DPAPI)"]
     end
 
-    subgraph External["External / Optional"]
-        HF["HuggingFace Hub\n(model download)"]
-        OR["OpenRouter API\n(cloud fallback)"]
-        MCP["MCP Client\n(Claude Desktop, etc.)"]
-        ALERT["Slack / Webhook\n(alert plugins)"]
+    subgraph Production["Production Targets"]
+        MCP["Model Context Protocol (MCP)\n(Claude Desktop, Cursor, Custom Agents)"]
+        API["REST Clients\n(Python, TypeScript, curl)"]
+        CI["CI/CD Gate\n(tiny-decision-cli)"]
     end
 
-    UI <-->|IPC| TC
-    TC <-->|Rust fn calls| AX
-    TC <-->|Rust fn calls| DB
-    TC <-->|Rust fn calls| INF
-    TC <-->|Rust fn calls| CAL
-    TC <-->|Rust fn calls| RT
-    TC <-->|Rust fn calls| PL
-    TC <-->|Rust fn calls| PLG
+    UI <-->|Tauri IPC| TC
+    TC <--> HMR
+    HMR --> GGUF
+    HMR --> ONNX
+    SOMI --> HMR
+    CALIB --> SOMI
+    DAG --> CALIB
+    AXUM --> DAG
+    DB <--> AXUM
 
-    AX -->|"POST /somi/v1/decide"| INF
-    AX -->|"GET /somi/v1/health"| Core
-    INF --> DB
-    CAL --> DB
-    PL --> PLG
-
-    HF -->|GGUF download| INF
-    OR -->|SOMI Adapter| AX
-    MCP -->|"POST /somi/v1/decide"| AX
-    PLG --> ALERT
+    AXUM --> API
+    AXUM --> MCP
+    Core --> CI
 ```
-
-### Component Overview
-
-| Component | Location | Purpose |
-|---|---|---|
-| **Tauri App** | `app/src-tauri/` | Desktop shell, system tray, IPC bridge |
-| **Core Crate** | `core/` | Shared types, DB, inference, calibration |
-| **CLI Crate** | `cli/` | `td` binary for CI/CD |
-| **Plugin Host** | `core/src/plugins/` | WASM sandbox via wasmtime |
-| **Axum Server** | `app/src-tauri/src/server.rs` | SOMI-compliant HTTP API |
-| **SQLite DB** | `~/.tiny-decision/db.sqlite3` | Decisions, runs, calibration params |
 
 ---
 
-## Quick Start
+## ⚡ Quick Start
 
-### Prerequisites
+### Option A: Download the Windows App (Recommended)
+Download the latest portable release from **[Releases](https://github.com/aryanthegamedev3465-collab/tiny-decision/releases)**:
+1. Download `tiny-decision-v1.0.0-windows-x64.zip`.
+2. Extract the folder anywhere on Windows 10/11.
+3. Double-click `Tiny Decision.bat` or run `td.exe`.
 
-| Tool | Version | Notes |
-|---|---|---|
-| Rust | 1.77+ | `rustup update` |
-| Node.js | 20+ | For Tauri frontend |
-| pnpm | 8+ | `npm i -g pnpm` |
-| Tauri CLI | 2.x | `cargo install tauri-cli` |
+### Option B: Run from Source
 
-### 1. Clone
-
-```bash
-git clone https://github.com/tinydecision/tiny-decision.git
+```powershell
+# 1. Clone repository
+git clone https://github.com/aryanthegamedev3465-collab/tiny-decision.git
 cd tiny-decision
-```
 
-### 2. Install Frontend Dependencies
-
-```bash
+# 2. Run the frontend in dev mode
 cd app
-pnpm install
-```
+npm install
+npm run dev
 
-### 3. Download a Model
-
-```bash
-# Via CLI
-cargo run -p td-cli -- models download microsoft/phi-2 --quant Q4_K_M
-
-# Or use the in-app Model Browser
-```
-
-### 4. Run in Development Mode
-
-```bash
-# From repo root
-cargo tauri dev
-```
-
-### 5. Make Your First Decision
-
-```bash
-curl -X POST http://localhost:11535/somi/v1/decide \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model_id": "microsoft/phi-2",
-    "template_id": "refund-eligibility",
-    "state": {
-      "order_value": 45.99,
-      "days_since_purchase": 12,
-      "customer_tier": "gold"
-    },
-    "questions": [
-      { "id": "eligible", "type": "choice", "text": "Is this return eligible for an automatic refund?", "choices": ["yes", "no"] }
-    ]
-  }'
+# 3. Build the CLI binary
+cd ..
+cargo build --release --bin td
 ```
 
 ---
 
-## Build Steps
+## 🔌 System One Model Interface (SOMI v1)
 
-### Development Build
+Every model in Tiny Decision satisfies the uniform SOMI HTTP contract:
 
-```bash
-cargo tauri dev
-```
+```http
+POST http://127.0.0.1:11535/somi/v1/decide
+Content-Type: application/json
 
-### Production Build (Windows)
-
-```bash
-cargo tauri build
-# Outputs: app/src-tauri/target/release/bundle/
-#   - msi/   (MSIX)
-#   - nsis/  (NSIS installer)
-```
-
-### CLI Only
-
-```bash
-cargo build -p td-cli --release
-# Binary: target/release/td.exe (Windows) / td (Linux/macOS)
-```
-
-### Run Tests
-
-```bash
-cargo test --workspace
-```
-
-### CI Eval (for pipelines)
-
-```bash
-td eval \
-  --template refund-eligibility \
-  --eval-set ./evals/refund-v2.jsonl \
-  --fail-under-accuracy 0.92 \
-  --fail-over-ece 0.05
-```
-
----
-
-## SOMI Specification
-
-> **SOMI** (System One Model Interface) is the HTTP contract that all models and adapters in Tiny Decision must satisfy. See [`docs/SOMI_SPEC.md`](./docs/SOMI_SPEC.md) for the full specification.
-
-### At a Glance
-
-**POST `/somi/v1/decide`**
-
-```json
 {
-  "model_id": "microsoft/phi-2",
-  "template_id": "refund-eligibility",
-  "state": { "order_value": 45.99, "customer_tier": "gold" },
+  "state": {
+    "order_id": "ORD-94182",
+    "customer_tier": "platinum",
+    "item_condition": "unopened",
+    "days_since_delivery": 4
+  },
   "questions": [
     {
-      "id": "eligible",
-      "type": "choice",
-      "text": "Is this return eligible for automatic refund?",
-      "choices": ["yes", "no"]
+      "type": "Noul",
+      "id": "q_eligible",
+      "text": "Is this customer eligible for an immediate full refund?"
     }
-  ],
-  "options": {
-    "calibrate": true,
-    "temperature": 0.0
-  }
+  ]
 }
 ```
 
-**Response:**
-
+### Response:
 ```json
 {
-  "run_id": "run_01J9XK...",
-  "model_id": "microsoft/phi-2",
-  "template_id": "refund-eligibility",
   "answers": [
     {
-      "question_id": "eligible",
-      "value": "yes",
-      "probabilities": { "yes": 0.87, "no": 0.13 },
-      "confidence": 0.87,
-      "calibrated": true,
-      "latency_ms": 42
+      "question_id": "q_eligible",
+      "type": "Noul",
+      "value": true,
+      "confidence": 0.942,
+      "raw_confidence": 0.910,
+      "probability": 0.942,
+      "latency_ms": 28
     }
   ],
-  "total_latency_ms": 44,
-  "somi_version": "v1"
+  "latency_ms": 28,
+  "model_version": "jev-decision-1.5b"
 }
 ```
 
-### Question Types
-
-| Type | Description | Example |
-|---|---|---|
-| `choice` | Pick one from N choices | `{"type":"choice","choices":["yes","no","maybe"]}` |
-| `noul` | Null or value (present/absent) | `{"type":"noul","label":"escalate"}` |
-| `score` | 0–1 continuous score | `{"type":"score","label":"risk_score"}` |
-
-### Badges
-
-- 🏅 **Native** — model produces direct logit probabilities for each choice token (no prompt engineering needed)
-- 🔌 **Adapted** — model is wrapped by a SOMI Adapter plugin that extracts probabilities via prompt + parsing
-
 ---
 
-## Plugin Authoring Guide
+## 🤖 MCP Export — Ship Decisions as Agent Tools
 
-> Full guide: [`docs/PLUGIN_AUTHORING.md`](./docs/PLUGIN_AUTHORING.md)
+Any decision template can be published as an MCP tool directly into **Claude Desktop** or **Cursor**.
 
-Plugins are **WASM modules** compiled from Rust (or any WASM-capable language) and sandboxed by `wasmtime`. They declare capabilities in a `plugin.json` manifest.
-
-### Plugin Types
-
-| Type | Interface | Use Case |
-|---|---|---|
-| `somi_adapter` | `decide(request) -> response` | Wrap a cloud/local model behind SOMI |
-| `pipeline_node` | `process(node_input) -> node_output` | Custom ETL, alerting, formatting |
-| `eval_metric` | `compute(predictions, labels) -> metrics` | Custom calibration/eval metrics |
-
-### Quick Plugin Example
-
-```toml
-# plugins/my-plugin/Cargo.toml
-[package]
-name = "my-alert-plugin"
-version = "0.1.0"
-edition = "2021"
-
-[lib]
-crate-type = ["cdylib"]
-
-[dependencies]
-tiny-decision-sdk = "0.1"
-```
-
-```rust
-// plugins/my-plugin/src/lib.rs
-use tiny_decision_sdk::prelude::*;
-
-#[plugin_node]
-pub fn process(input: NodeInput) -> Result<NodeOutput> {
-    let decision = input.get_str("decision")?;
-    if decision == "escalate" {
-        http_post("https://hooks.slack.com/...", json!({ "text": "Escalation triggered!" }))?;
-    }
-    Ok(NodeOutput::passthrough(input))
-}
-```
-
-```bash
-cargo build --target wasm32-wasi --release
-td plugin install ./target/wasm32-wasi/release/my_alert_plugin.wasm --manifest plugin.json
-```
-
----
-
-## CLI Usage
-
-```
-USAGE:
-    td <COMMAND>
-
-COMMANDS:
-    eval        Evaluate a template against an eval set (CI-friendly)
-    run         Run a pipeline or single decision
-    models      Model management (list, download, info)
-    server      Start or stop the local SOMI server
-    plugin      Plugin management (install, list, remove)
-    help        Print this message or the help of the given subcommand(s)
-```
-
-### `td eval`
-
-```bash
-td eval \
-  --template refund-eligibility \
-  --eval-set ./evals/refund-v2.jsonl \
-  --fail-under-accuracy 0.92 \
-  --fail-over-ece 0.05
-```
-
-Exits with code `1` if accuracy < 0.92 or ECE > 0.05. Perfect for CI gates.
-
-### `td run`
-
-```bash
-# Run a single decision
-td run \
-  --pipeline refund-eligibility \
-  --state '{"order_value": 45.99, "customer_tier": "gold"}'
-
-# Run from file
-td run --pipeline refund-eligibility --state ./state.json
-```
-
-### `td models`
-
-```bash
-# List locally cached models
-td models list
-
-# Download from HuggingFace Hub
-td models download microsoft/phi-2 --quant Q4_K_M
-
-# Show model card
-td models info microsoft/phi-2
-```
-
-### `td server`
-
-```bash
-# Start on default port 11535
-td server start
-
-# Start on custom port
-td server start --port 8080
-
-# Stop
-td server stop
-```
-
----
-
-## MCP Integration
-
-Tiny Decision can expose any Decision Template or Pipeline as an **MCP (Model Context Protocol) tool**, making it directly callable by Claude Desktop, Cursor, or any MCP-compatible host.
-
-```bash
-# Publish a template as an MCP tool
-td mcp publish --template refund-eligibility
-```
-
-This registers the tool in the MCP manifest at `~/.tiny-decision/mcp-tools.json`. Add this to your Claude Desktop config:
+Add this to your `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "tiny-decision": {
-      "command": "td",
-      "args": ["server", "start", "--mcp"]
+      "command": "node",
+      "args": ["C:/path/to/tiny-decision/docs/mcp-server.js"]
     }
   }
 }
 ```
 
-See [`docs/mcp-examples/`](./docs/mcp-examples/) for example tool manifests.
+Now, Claude can call `decide_refund_eligibility({ state: { ... } })` as a native sub-50ms tool with zero custom glue code.
 
 ---
 
-## License
+## 📊 The Calibration Suite
 
-MIT License © 2026 Tiny Decision Authors. See [`LICENSE`](./LICENSE).
+### Expected Calibration Error (ECE)
+$$\text{ECE} = \sum_{m=1}^{M} \frac{|B_m|}{N} \left| \text{acc}(B_m) - \text{conf}(B_m) \right|$$
+
+- **Reliability Diagrams:** Plots reported confidence buckets against empirical accuracy.
+- **Post-Hoc Recalibration:** Fits Temperature scaling ($T$), Platt scaling ($A, B$), or non-parametric Isotonic regression.
+- **Adversarial Probe Generator:** Automatically perturbs state text (conflict injection, prompt injection overrides, negation swaps) to stress-test fragile boundaries.
+- **Cost-Matrix Threshold Tuning:** Minimizes enterprise financial risk based on the cost of false positives, false negatives, and human escalations.
+
+---
+
+## 📦 Project Layout
+
+```
+tiny-decision/
+├── assets/                         # Curated models manifest & app logo
+├── app/                            # React 18 + TypeScript + Tailwind frontend
+│   ├── src/pages/                  # Models, Playground, Batch, Pipelines, Calibration, etc.
+│   └── src-tauri/                  # Tauri 2.x desktop configuration & commands
+├── core/                           # Rust core library (inference, SOMI, calibration, server)
+├── cli/                            # tiny-decision-cli (td binary)
+├── docs/                           # SOMI spec, plugin guide, architecture, OpenAPI spec
+└── plugins/examples/               # WASM plugins (Slack alert, OpenRouter adapter)
+```
+
+---
+
+## 📜 License
+
+MIT License © 2026 Tiny Decision Authors. See [`LICENSE`](./LICENSE) for details.
