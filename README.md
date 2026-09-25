@@ -31,19 +31,6 @@ Tiny Decision owns the three pillars needed for this category:
 
 ---
 
-## 🎨 Grok-Inspired Visual Experience
-
-The application is styled with a high-tech **Grok aesthetic** — colourful, vibrant, yet intensely professional:
-
-- 🌌 **Cosmic Obsidian Canvas:** `#060709` deep-space background layered with atmospheric radial glows in cyan, neon emerald, and violet.
-- ⚡ **Neon System One Color System:**
-  - **Electric Cyan (`#00f0ff`):** Auto-router, active inputs, and system telemetry.
-  - **Hyper Emerald (`#00ff88`):** High-confidence decisions ($\ge 0.80$) and verified badges.
-  - **Cyber Amber (`#ffb703`):** Mid-confidence decisions ($0.50 - 0.79$) and human-review escalation indicators.
-  - **Neon Crimson (`#ff0055`):** Low-confidence / rejection flags ($< 0.50$).
-  - **Quantum Violet (`#9d4edd`):** DAG control flow and pipeline nodes.
-- 🧊 **Glassmorphic Decision Cards:** Frosted translucent panels (`.glass-card`), glowing dual-gradient probability meters, and animated latency counters.
-- 🚀 **1-Click Presets:** Instant decision presets in the playground for **Refund Validation**, **Spam Detection**, **Credit Risk**, and **Sentiment Analysis**.
 
 ---
 
