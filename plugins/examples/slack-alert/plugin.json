@@ -1,0 +1,17 @@
+{
+  "id": "slack-alert",
+  "name": "Slack Escalation Notifier",
+  "version": "1.0.0",
+  "description": "Sends low-confidence human escalation alerts directly into a designated Slack channel.",
+  "category": "pipeline_node",
+  "entrypoint": "plugin.wasm",
+  "permissions": {
+    "network_hosts": [
+      "hooks.slack.com"
+    ],
+    "filesystem_reads": [],
+    "required_secrets": [
+      "SLACK_WEBHOOK_URL"
+    ]
+  }
+}

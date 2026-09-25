@@ -1,0 +1,68 @@
+# Rust
+/target
+**/*.rs.bk
+Cargo.lock
+
+# Node / frontend
+node_modules/
+dist/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Tauri
+app/src-tauri/target/
+app/dist/
+app/.tauri/
+
+# Build artifacts
+*.msix
+*.exe
+!push-to-github.ps1
+*.msi
+*.deb
+*.rpm
+*.AppImage
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.pfx
+
+# OS files
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# IDE
+.vscode/settings.json
+.idea/
+*.iml
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Model files (large binary, user downloads these)
+*.gguf
+*.onnx
+*.part
+*.part.state.json
+!assets/*.json
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# TypeScript generated
+*.js.map
+*.d.ts.map
+
+# Coverage
+coverage/
+*.lcov

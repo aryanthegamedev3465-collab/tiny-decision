@@ -1,0 +1,154 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Tiny Decision",
+  "version": "0.1.0",
+  "identifier": "com.tinydecision.app",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Tiny Decision",
+        "width": 1280,
+        "height": 800,
+        "minWidth": 1024,
+        "minHeight": 640,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true,
+        "decorations": true,
+        "transparent": false,
+        "shadow": true,
+        "visible": true,
+        "url": "index.html"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://huggingface.co; connect-src 'self' http://localhost:11535 https://huggingface.co https://openrouter.ai"
+    },
+    "trayIcon": {
+      "iconPath": "icons/tray-icon.png",
+      "iconAsTemplate": true,
+      "menuOnLeftClick": false,
+      "title": "Tiny Decision",
+      "tooltip": "Tiny Decision – AI Decision Engine"
+    },
+    "macOSPrivateApi": false
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "msi"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": [],
+    "externalBin": [],
+    "copyright": "© 2026 Tiny Decision Authors",
+    "category": "DeveloperTool",
+    "shortDescription": "System One AI Decision Engine",
+    "longDescription": "Tiny Decision runs small, fast AI models locally to answer structured classification questions with calibrated confidence scores.",
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": "",
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "headerImage": "icons/installer-header.bmp",
+        "sidebarImage": "icons/installer-sidebar.bmp",
+        "uninstallerIcon": "icons/icon.ico",
+        "installMode": "perMachine",
+        "languages": ["English"],
+        "allowToChangeInstallationDirectory": true,
+        "deleteAppDataOnUninstall": false,
+        "displayLanguageSelector": false,
+        "minimumWebview2Version": "2.0.0"
+      },
+      "msi": {
+        "productCode": "{9D8B2F74-1A3C-4E8D-B6F2-7A4D9E1C3B5F}",
+        "enableDefaultFeatures": true,
+        "banner": "icons/installer-banner.bmp",
+        "dialog": "icons/installer-dialog.bmp",
+        "upgradeCode": "{2C4E8A6D-1B3F-4D9E-A7C5-8F2B4E6D1A3C}"
+      }
+    },
+    "linux": {
+      "deb": {
+        "depends": []
+      },
+      "rpm": {
+        "depends": []
+      },
+      "appimage": {
+        "bundleMediaFramework": false
+      }
+    }
+  },
+  "plugins": {
+    "shell": {
+      "open": true,
+      "all": false,
+      "scopes": []
+    },
+    "fs": {
+      "all": false,
+      "readFile": true,
+      "writeFile": true,
+      "readDir": true,
+      "copyFile": true,
+      "createDir": true,
+      "removeDir": true,
+      "removeFile": true,
+      "renameFile": true,
+      "exists": true,
+      "scope": {
+        "allow": [
+          "$APPDATA/tiny-decision/**",
+          "$HOME/.tiny-decision/**",
+          "$DOWNLOAD/**",
+          "$DOCUMENT/**"
+        ],
+        "deny": ["$HOME/.ssh/**", "$HOME/.gnupg/**"]
+      }
+    },
+    "http": {
+      "scopes": {
+        "allow": [
+          "http://localhost:11535/**",
+          "https://huggingface.co/**",
+          "https://openrouter.ai/**",
+          "https://hooks.slack.com/**",
+          "https://api.tiny-decision.com/**"
+        ]
+      }
+    },
+    "notification": {
+      "all": true
+    },
+    "process": {
+      "all": false,
+      "exit": true,
+      "relaunch": true
+    },
+    "updater": {
+      "pubkey": "",
+      "endpoints": ["https://api.tiny-decision.com/updates/{{target}}/{{arch}}/{{current_version}}"],
+      "dialog": true,
+      "active": false
+    },
+    "window-state": {
+      "stateFlags": "all"
+    }
+  }
+}

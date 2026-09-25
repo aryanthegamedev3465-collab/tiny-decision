@@ -1,0 +1,166 @@
+openapi: 3.0.3
+info:
+  title: Tiny Decision Local API
+  description: High-performance local REST surface for System One decision models and DAG pipelines.
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:11535
+    description: Default local loopback server
+
+paths:
+  /v1/decide:
+    post:
+      summary: Execute a typed decision
+      description: Evaluates a State context against a set of typed Questions (Choice, Noul, Score) returning calibrated confidences.
+      operationId: decide
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - state
+                - questions
+              properties:
+                model:
+                  type: string
+                  description: Model identifier or "auto-best-of-loaded"
+                  example: "jev-decision-1.5b"
+                state:
+                  type: object
+                  description: Contextual payload or facts
+                  example:
+                    order_id: "ORD-94182"
+                    days_since_delivery: 6
+                    item_condition: "unopened"
+                questions:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                      - text
+                    properties:
+                      type:
+                        type: string
+                        enum: [Choice, Noul, Score]
+                      id:
+                        type: string
+                      text:
+                        type: string
+                      options:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            label:
+                              type: string
+      responses:
+        '200':
+          description: Successful decision execution
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        question_id:
+                          type: string
+                        type:
+                          type: string
+                        confidence:
+                          type: number
+                        latency_ms:
+                          type: integer
+                  latency_ms:
+                    type: integer
+                  model_version:
+                    type: string
+
+  /v1/models:
+    get:
+      summary: List loaded and available models
+      operationId: listModels
+      responses:
+        '200':
+          description: List of resident hot models
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        status:
+                          type: string
+
+  /v1/pipelines/{id}/run:
+    post:
+      summary: Execute a saved visual DAG pipeline
+      operationId: runPipeline
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - state
+              properties:
+                state:
+                  type: object
+      responses:
+        '200':
+          description: Pipeline executed successfully
+
+  /v1/feedback:
+    post:
+      summary: Ingest flywheel ground-truth feedback
+      operationId: submitFeedback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - decision_call_id
+                - question_id
+                - correct_value
+              properties:
+                decision_call_id:
+                  type: string
+                question_id:
+                  type: string
+                correct_value:
+                  type: string
+      responses:
+        '200':
+          description: Feedback recorded and queued for versioned EvalSet update
+
+  /health:
+    get:
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Server is online

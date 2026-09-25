@@ -1,0 +1,17 @@
+{
+  "id": "openrouter-somi-adapter",
+  "name": "OpenRouter SOMI Adapter",
+  "version": "1.0.0",
+  "description": "Exposes OpenRouter-hosted decision endpoints through the uniform SOMI interface.",
+  "category": "somi_adapter",
+  "entrypoint": "adapter.wasm",
+  "permissions": {
+    "network_hosts": [
+      "openrouter.ai"
+    ],
+    "filesystem_reads": [],
+    "required_secrets": [
+      "OPENROUTER_API_KEY"
+    ]
+  }
+}

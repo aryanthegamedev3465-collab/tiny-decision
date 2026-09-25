@@ -1,0 +1,20 @@
+[package]
+name        = "tiny-decision-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "td"
+path = "src/main.rs"
+
+[dependencies]
+tiny-decision-core = { path = "../core" }
+tokio   = { workspace = true }
+serde   = { workspace = true }
+serde_json = { workspace = true }
+anyhow  = { workspace = true }
+clap    = { version = "4", features = ["derive"] }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }

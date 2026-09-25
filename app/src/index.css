@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  body {
+    background-color: #060709;
+    background-image: 
+      radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(157, 78, 221, 0.05) 0%, transparent 45%),
+      radial-gradient(circle at 50% 85%, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
+    color: #f8fafc;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+  }
+
+  /* Custom Grok-styled scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 240, 255, 0.5);
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism & Neon Surfaces */
+  .glass-card {
+    background: rgba(14, 18, 28, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+  }
+
+  .glass-card-hover {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .glass-card-hover:hover {
+    background: rgba(20, 26, 40, 0.75);
+    border-color: rgba(0, 240, 255, 0.3);
+    box-shadow: 0 12px 40px rgba(0, 240, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  /* Glowing Gradients */
+  .gradient-text-grok {
+    background: linear-gradient(135deg, #00f0ff 0%, #00ff88 50%, #9d4edd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-cyan {
+    background: linear-gradient(135deg, #00f0ff 0%, #00ff88 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-text-amber {
+    background: linear-gradient(135deg, #ffb703 0%, #ff0055 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Glowing badges */
+  .glow-badge-cyan {
+    background: rgba(0, 240, 255, 0.1);
+    color: #00f0ff;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+  }
+
+  .glow-badge-emerald {
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.2);
+  }
+
+  .glow-badge-purple {
+    background: rgba(157, 78, 221, 0.1);
+    color: #c77dff;
+    border: 1px solid rgba(157, 78, 221, 0.3);
+    box-shadow: 0 0 12px rgba(157, 78, 221, 0.2);
+  }
+
+  .glow-badge-amber {
+    background: rgba(255, 183, 3, 0.1);
+    color: #ffb703;
+    border: 1px solid rgba(255, 183, 3, 0.3);
+    box-shadow: 0 0 12px rgba(255, 183, 3, 0.2);
+  }
+
+  .glow-badge-crimson {
+    background: rgba(255, 0, 85, 0.1);
+    color: #ff0055;
+    border: 1px solid rgba(255, 0, 85, 0.3);
+    box-shadow: 0 0 12px rgba(255, 0, 85, 0.2);
+  }
+
+  /* Confidence level color helper classes */
+  .text-confidence-high { color: #00ff88; }
+  .text-confidence-mid  { color: #ffb703; }
+  .text-confidence-low  { color: #ff0055; }
+
+  /* Window drag regions */
+  .tauri-drag {
+    -webkit-app-region: drag;
+  }
+  .tauri-no-drag {
+    -webkit-app-region: no-drag;
+  }
+
+  /* React Flow theme overrides */
+  .react-flow__background {
+    background-color: #060709 !important;
+  }
+  .react-flow__controls {
+    background: rgba(16, 20, 31, 0.9) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+  }
+  .react-flow__controls-button {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #94a3b8 !important;
+  }
+  .react-flow__controls-button:hover {
+    background: rgba(0, 240, 255, 0.15) !important;
+    color: #00f0ff !important;
+  }
+  .react-flow__edge-path {
+    stroke: rgba(255, 255, 255, 0.25) !important;
+    stroke-width: 2 !important;
+  }
+  .react-flow__edge.selected .react-flow__edge-path {
+    stroke: #00f0ff !important;
+    filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.6)) !important;
+  }
+}

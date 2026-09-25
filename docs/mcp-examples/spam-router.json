@@ -1,0 +1,41 @@
+{
+  "name": "decide_spam_email",
+  "description": "High-throughput Noul-class binary decision classifying inbound communications as phishing/spam or clean.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "state": {
+        "type": "object",
+        "properties": {
+          "subject": { "type": "string" },
+          "from_address": { "type": "string" },
+          "body": { "type": "string" },
+          "has_links": { "type": "boolean" },
+          "spf_pass": { "type": "boolean" }
+        },
+        "required": ["subject", "from_address", "body"]
+      }
+    },
+    "required": ["state"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "is_spam": {
+        "type": "boolean",
+        "description": "True if classified as spam or phishing."
+      },
+      "category": {
+        "type": "string",
+        "enum": ["clean", "promotional", "phishing_credential_harvest", "malware_delivery", "general_spam"]
+      },
+      "confidence": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 1.0,
+        "description": "Post-calibrated confidence score"
+      }
+    },
+    "required": ["is_spam", "category", "confidence"]
+  }
+}

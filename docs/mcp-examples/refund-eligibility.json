@@ -1,0 +1,41 @@
+{
+  "name": "decide_refund_eligibility",
+  "description": "Evaluates customer refund request context against corporate return policies returning calibrated decision and confidence.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "state": {
+        "type": "object",
+        "properties": {
+          "order_id": { "type": "string" },
+          "days_since_delivery": { "type": "number" },
+          "item_condition": { "type": "string", "enum": ["unopened", "opened_undamaged", "damaged"] },
+          "requested_amount_usd": { "type": "number" },
+          "prior_refund_count": { "type": "number" }
+        },
+        "required": ["days_since_delivery", "item_condition", "requested_amount_usd"]
+      }
+    },
+    "required": ["state"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "eligible_for_refund": {
+        "type": "boolean",
+        "description": "Whether the refund is approved automatically."
+      },
+      "action_type": {
+        "type": "string",
+        "enum": ["instant_refund", "return_label_required", "escalate_to_human", "reject"]
+      },
+      "confidence": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 1.0,
+        "description": "Calibrated model confidence"
+      }
+    },
+    "required": ["eligible_for_refund", "action_type", "confidence"]
+  }
+}
